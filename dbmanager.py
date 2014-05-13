@@ -26,7 +26,7 @@ class DBManager:
 	IGNORE     = 'IGNORE'
 
 
-	def __init__(self, host, user, passwd, db, socket, table="jobs") :
+	def __init__(self, host, user, passwd, db, socket='/var/run/mysqld/mysqld.sock', table="jobs") :
 
 		self.db = MySQLdb.connect(host=host, 
 														user=user, 
