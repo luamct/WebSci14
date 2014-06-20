@@ -107,7 +107,7 @@ class ExtractorManager() :
 					# Load scaled down version of the image
 					rgb_img = utils.image.load_image(config.SCALED_FOLDER, image_id)
 
-# 				print "Process %d processing image %d" % (self.thread_id, image_id)
+				# Process all registered extractors
 				for extractor in self.extrators :
 					print extractor.__class__
 					
@@ -156,16 +156,16 @@ if __name__ == '__main__':
 
 	# Configure the extractors to be extracted
 	extractors = [
-    							Daubechies(config.WAVELET_LEVELS),
-       					 BasicColors(config.COLOR_NAMES_FILE, 0.6),
-       					 Sharpness(3, 0.8),
-        					Colorfulness(5),
-    							Statistics(),
-  								DetailLevel(),
-  								Background(),
- 								Contrast(0.98),
-								Shape(),
-  								RuleOfThirds(),
+							Daubechies(config.WAVELET_LEVELS),
+							BasicColors(config.COLOR_NAMES_FILE, 0.6),
+							Sharpness(3, 0.8),
+							Colorfulness(5),
+							Statistics(),
+							DetailLevel(),
+							Background(),
+							Contrast(0.98),
+							Shape(),
+							RuleOfThirds()
 							 ]
 
 	nprocesses = 1
