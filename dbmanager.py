@@ -97,12 +97,11 @@ class DBManager:
 		self.db.commit()
 		cursor.close()
 
-	
 
-	def get_repins(self, small=False, min_repins=0, sample=None) :
+	def get_repins(self, sample=None) :
 		c = self.db.cursor()
 
-		query = "SELECT id, nRepins FROM pins WHERE nRepins>=%d AND useit=1" % (min_repins)
+		query = "SELECT id, nRepins FROM pins WHERE useit=1"
 		c.execute(query)
 		rows = c.fetchall()
 		c.close()
@@ -139,7 +138,7 @@ class DBManager:
 		if not rows:
 			return  [], [], {}
 
-		data = np.empty((len(ids), len(columns)), dtype=np.float64)
+		data = np.empty((len(ids), len(columns)), dtype=np.float32)
 
 		for i, pin_id in enumerate(ids):
 			data[i,:] = rows_map[pin_id]
@@ -218,7 +217,6 @@ class DBManager:
 		'''
 		Read the aesthetic features from the database.
 		'''
-	#	if (not cache_file or not os.path.exists(cache_file)) :
 	
 		data = []
 		for table, columns in aes_filter.items() :
@@ -231,8 +229,8 @@ class DBManager:
 	
 		data = np.hstack(data)
 		return features, data
-	
-	
+
+
 	def get_data_semantics(self, concepts, ids):
 		'''
 		Read the semantic concepts from the files. 
@@ -320,6 +318,42 @@ class DBManager:
 		data = vec.fit_transform(data).toarray()
 		return vec.get_feature_names(), data
 	
+	
+	def get_pins_info(self, ids=None):
+		c = self.db.cursor()
+
+		c.execute("""SELECT p.id, u.id, u.nFollowers, b.nFollowers
+		             FROM pins p JOIN users u ON p.user_id = u.id
+		             JOIN boards b ON p.board_id = b.id
+		             WHERE p.useit=1 AND u.nFollowers>0""")
+		rows = c.fetchall()
+		c.close()
+
+		pins = {}
+		for pid, uid, ufollowers, bfollowers in rows:
+			if ids==None or (pid in ids) :
+				pins[pid] = (uid, ufollowers, bfollowers)
+
+		return pins
+
+
+	def get_repins_mean_and_std(self):
+		c = self.db.cursor()
+
+		c.execute("""select u.nFollowers, COUNT(1), AVG(p.nRepins), STD(p.nRepins) 
+								 from pins p join users u on p.user_id = u.id
+								 where u.nFollowers > 0 
+								 group by user_id""")
+
+		rows = c.fetchall()
+		c.close()
 		
+		followers, npins, mean_repins, std_repins = zip(*rows)
+		return np.asarray(followers, int), \
+					 np.asarray(npins, int), \
+					 np.asarray(mean_repins, float), \
+					 np.asarray(std_repins, float)
+
+
 	def close(self) :
 		self.db.close()
