@@ -237,8 +237,7 @@ def lines(x, ys, legends, xlabel='', ylabel='', xlim=(), ylim=(), title='', outf
 	
 	if outfile : 
 		pp.savefig(outfile)
-	else : 
-		pp.show() 
+	pp.show() 
 	
 
 if __name__ == "__main__" :
