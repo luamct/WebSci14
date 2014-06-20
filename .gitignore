@@ -3,7 +3,9 @@ __pycache__/
 *.py[cod]
 
 # Application log
-log
+log/
+data/
+charts/
 
 # C extensions
 *.so
