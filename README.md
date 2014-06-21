@@ -16,7 +16,9 @@ FOR A PARTICULAR PURPOSE or MERCHANTABILITY.
 
 # Data
 
-The data collected and generated in this work cannot be hosted on GitHub for storage reasons. It's currently being uploaded to dedicated repositories and **should soon be made available** as link in this section.
+The data collected and generated in this work is hosted at FigShare in the link below. The images had to be split into multiple files due to FigShare's maximum file restriction.
+
+[The Impact of Visual Attributes on Online Image Diffusion](http://figshare.com/articles/The_Impact_of_Visual_Attributes_on_Image_Diffusion/1044282)
 
 
 # Database
